@@ -23,7 +23,7 @@
         <surefire.plugin.version>3.2.5</surefire.plugin.version>
         <maven.compiler.plugin>3.12.1</maven.compiler.plugin>
         <java.source.version>11</java.source.version>
-        <threadCount>5</threadCount>
+        <threadCount>1</threadCount>
     </properties>
 
     <dependencies>
@@ -105,10 +105,15 @@
                     <artifactId>maven-surefire-plugin</artifactId>
                     <version>${surefire.plugin.version}</version>
                     <configuration>
-                        <parallel>methods</parallel>
-                        <threadCount>${threadCount}</threadCount>
+                        <properties>
+                            <propertie>
+<!--                                <parallel>classes</parallel>-->
+                                <name>dataproviderthreadcount</name>
+                                <value>${threadCount}</value>
+                            </propertie>
+                        </properties>
                         <systemPropertyVariables>
-                            <env>prod</env>
+                            <env>test</env>
                             <browser>chrome</browser>
                             <os-name></os-name>
                             <os-version></os-version>

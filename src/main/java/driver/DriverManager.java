@@ -1,6 +1,7 @@
-package driver.browser;
+package driver;
 
-import com.aventstack.extentreports.ExtentTest;
+import config.platforms.PlatformReader;
+import data.CommonConstants;
 import enums.PlatformType;
 import interfaces.Platform;
 import io.appium.java_client.android.AndroidDriver;
@@ -19,16 +20,16 @@ import org.openqa.selenium.safari.SafariDriver;
 import org.openqa.selenium.safari.SafariOptions;
 
 import java.net.URL;
+import java.time.Duration;
 import java.util.Optional;
 
-public class DriverFactory {
+public class DriverManager {
 
     private static final ThreadLocal<WebDriver> driver = new ThreadLocal<WebDriver>();
-    private static final ThreadLocal<ExtentTest> testLog = new ThreadLocal<ExtentTest>();
 
-    public static void setDriver(Optional<Platform> platform) {
+    public static void setUpDriver() {
         try {
-//            Optional<Platform> platform = new PlatformReader().read().stream().findFirst();
+            Optional<Platform> platform = new PlatformReader().read().stream().findFirst();
             PlatformType platformType = platform.get().getPlatform();
             DesiredCapabilities capabilities = platform.get().getDesiredCapabilities();
             URL remoteUrl = platform.get().getRemoteUrl();
@@ -52,7 +53,7 @@ public class DriverFactory {
                     default:
                         throw new IllegalArgumentException("Unsupported mobile os: " +os +".");
                 }
-            } else if (platformType.equals(PlatformType.WEB)){
+            } else if (platformType.equals(PlatformType.WEB)) {
                 String browser = platform.get().getBrowserName();
                 switch(browser) {
                     case "chrome":
@@ -79,7 +80,6 @@ public class DriverFactory {
                         } else {
                             WebDriverManager.firefoxdriver().setup();
                             driver.set(new FirefoxDriver(DriverOptionsManager.getFirefoxOptions()));
-//                            driver = ThreadLocal.withInitial(() -> new FirefoxDriver(DriverOptionsManager.getFirefoxOptions()));
                         }
                         break;
                     case "safari":
@@ -111,8 +111,22 @@ public class DriverFactory {
                         throw new IllegalArgumentException("Unsupported browser type: " +browser +".");
                 }
             }
+            getDriver().manage().timeouts().implicitlyWait(Duration.ofSeconds(CommonConstants.IMPLICIT_TIMEOUT));
+            if (platform.get().getPlatform().equals(PlatformType.WEB)) {
+                try {
+                    getDriver().manage().window().maximize();
+                } catch (Exception ex) {
+                    throw  ex;
+                }
+            }
         } catch (Exception ex) {
-            ex.printStackTrace();
+            throw  ex;
+        }
+    }
+
+    public static void tearDown() {
+        if (getDriver() != null) {
+            getDriver().quit();
         }
     }
 
@@ -120,12 +134,8 @@ public class DriverFactory {
         return driver.get();
     }
 
-    public static void setTestLog(ExtentTest testName) {
-        testLog.set(testName);
-    }
-
-    public static ExtentTest getTestLog() {
-        return testLog.get();
+    public  static  void open(String url) {
+        getDriver().get(url);
     }
 
 }

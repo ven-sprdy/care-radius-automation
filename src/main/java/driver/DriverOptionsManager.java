@@ -1,4 +1,4 @@
-package driver.browser;
+package driver;
 
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.edge.EdgeOptions;
