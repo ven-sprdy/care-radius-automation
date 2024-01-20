@@ -1,0 +1,6 @@
+.idea
+report/
+*.iml
+*.html
+*.pdf
+target/
