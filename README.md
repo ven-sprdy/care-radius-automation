@@ -1,1 +1,1 @@
-mvn test -Dcucumber.filter.tags="@tagname"
+mvn test -D"cucumber.filter.tags=@tagname"

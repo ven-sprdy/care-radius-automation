@@ -4,8 +4,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.hp</groupId>
-    <artifactId>care-radius-automation</artifactId>
+    <groupId>com.parabank</groupId>
+    <artifactId>para-bank-automation</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <packaging>jar</packaging>
@@ -20,6 +20,8 @@
         <gherkin.version>27.0.0</gherkin.version>
         <extent.version>5.1.1</extent.version>
         <extent.cucumber.version>1.14.0</extent.cucumber.version>
+        <lombok.version>1.18.30</lombok.version>
+        <log4j.version>2.22.1</log4j.version>
         <surefire.plugin.version>3.2.5</surefire.plugin.version>
         <maven.compiler.plugin>3.12.1</maven.compiler.plugin>
         <java.source.version>11</java.source.version>
@@ -86,14 +88,24 @@
         <dependency>
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
-            <version>7.9.0</version>
+            <version>${testng.version}</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>org.testng</groupId>
-            <artifactId>testng</artifactId>
-            <version>7.9.0</version>
-            <scope>compile</scope>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>${log4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+            <version>${log4j.version}</version>
         </dependency>
     </dependencies>
 
@@ -117,7 +129,7 @@
                             <browser>chrome</browser>
                             <os-name></os-name>
                             <os-version></os-version>
-                            <cloud>false</cloud>
+                            <grid>false</grid>
                             <device></device>
                             <mobile>false</mobile>
                             <headless>false</headless>
@@ -131,6 +143,13 @@
                     <configuration>
                         <source>${java.source.version}</source>
                         <target>${java.source.version}</target>
+                        <annotationProcessorPaths>
+                            <path>
+                                <groupId>org.projectlombok</groupId>
+                                <artifactId>lombok</artifactId>
+                                <version>${lombok.version}</version>
+                            </path>
+                        </annotationProcessorPaths>
                     </configuration>
                 </plugin>
             </plugins>

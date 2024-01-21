@@ -3,4 +3,5 @@ report/
 *.iml
 *.html
 *.pdf
+*.log
 target/
